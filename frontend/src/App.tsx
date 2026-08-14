@@ -25,6 +25,7 @@ import { ApiConfigPanel } from "./components/ApiConfigPanel";
 import { InterviewerDialog } from "./components/InterviewerDialog";
 import { EmptyLine, SectionHeader, StatusPill } from "./components/common";
 import { SettingsDrawer } from "./components/SettingsDrawer";
+import { CitationDrawer } from "./components/CitationDrawer";
 import { agentkbApi, type MeResponse } from "./services/agentkbApi";
 import { downloadSafeConfig } from "./services/configExport";
 import {
@@ -71,6 +72,7 @@ export default function App() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const timersRef = useRef<number[]>([]);
   const retryDelaySeconds = 8;
+  const [selectedCitation, setSelectedCitation] = useState<string | null>(null);
 
   const canSend = queueStatus !== "queued" && queueStatus !== "running" && question.trim().length > 0 && (!config.byokEnabled || config.userApiKey.trim().length > 0);
   const activeDocuments = documents.filter((item) => item.status === "ready");
@@ -545,7 +547,7 @@ export default function App() {
                     {!!message.sources?.length && (
                       <div className="source-row">
                         {message.sources.map((source) => (
-                          <span key={source}><FileText size={13} />{source}</span>
+                          <span key={source} onClick={() => setSelectedCitation(source)}><FileText size={13} />{source}</span>
                         ))}
                       </div>
                     )}
@@ -618,6 +620,9 @@ export default function App() {
         )}
         {interviewerOpen && (
           <InterviewerDialog onClose={() => setInterviewerOpen(false)} onLogin={handleInterviewerLogin} />
+        )}
+        {selectedCitation && (
+          <CitationDrawer citation={selectedCitation} onClose={() => setSelectedCitation(null)} />
         )}
       </AnimatePresence>
     </div>

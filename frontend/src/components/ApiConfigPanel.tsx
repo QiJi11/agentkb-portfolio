@@ -97,58 +97,60 @@ export function ApiConfigPanel({ config, role, onConfigChange, onOpenInterviewer
           />
           启用客户 API 模式
         </label>
-        <div className="api-fields">
-          <label>
-            Provider 下拉预设
-            <select value={providerPresets.some((item) => item.name === config.provider) ? config.provider : ""} onChange={(event) => applyProviderPreset(event.target.value)}>
-              <option value="">自定义</option>
-              {providerPresets.map((preset) => (
-                <option value={preset.name} key={preset.name}>{preset.name}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Provider 手动输入
-            <input value={config.provider} onChange={(event) => onConfigChange({ ...config, provider: event.target.value })} />
-          </label>
-          <label>
-            Base URL 手动输入
-            <input value={config.baseUrl} onChange={(event) => onConfigChange({ ...config, baseUrl: event.target.value })} placeholder="https://api.example.com/v1" />
-          </label>
-          <label>
-            Model 下拉检测
-            <div className="model-detect-row">
-              <select
-                value={models.includes(config.model) ? config.model : ""}
-                onChange={(event) => onConfigChange({ ...config, model: event.target.value })}
-                disabled={!models.length}
-              >
-                <option value="">{models.length ? "选择检测到的模型" : "未检测"}</option>
-                {models.map((model) => (
-                  <option value={model} key={model}>{model}</option>
+        {config.byokEnabled && (
+          <div className="api-fields">
+            <label>
+              Provider 下拉预设
+              <select value={providerPresets.some((item) => item.name === config.provider) ? config.provider : ""} onChange={(event) => applyProviderPreset(event.target.value)}>
+                <option value="">自定义</option>
+                {providerPresets.map((preset) => (
+                  <option value={preset.name} key={preset.name}>{preset.name}</option>
                 ))}
               </select>
-              <button type="button" onClick={detectModels} disabled={!config.baseUrl.trim() || !config.userApiKey.trim() || loadingModels}>
-                <RefreshCw size={14} />
-                {loadingModels ? "检测中" : "检测模型"}
-              </button>
-            </div>
-            {modelStatus && <span>{modelStatus}</span>}
-          </label>
-          <label>
-            Model 手动输入
-            <input value={config.model} onChange={(event) => onConfigChange({ ...config, model: event.target.value })} />
-          </label>
-          <label>
-            API Key
-            <input
-              type="password"
-              value={config.userApiKey}
-              onChange={(event) => onConfigChange({ ...config, userApiKey: event.target.value })}
-              placeholder="仅保存在当前浏览器"
-            />
-          </label>
-        </div>
+            </label>
+            <label>
+              Provider 手动输入
+              <input value={config.provider} onChange={(event) => onConfigChange({ ...config, provider: event.target.value })} />
+            </label>
+            <label>
+              Base URL 手动输入
+              <input value={config.baseUrl} onChange={(event) => onConfigChange({ ...config, baseUrl: event.target.value })} placeholder="https://api.example.com/v1" />
+            </label>
+            <label>
+              Model 下拉检测
+              <div className="model-detect-row">
+                <select
+                  value={models.includes(config.model) ? config.model : ""}
+                  onChange={(event) => onConfigChange({ ...config, model: event.target.value })}
+                  disabled={!models.length}
+                >
+                  <option value="">{models.length ? "选择检测到的模型" : "未检测"}</option>
+                  {models.map((model) => (
+                    <option value={model} key={model}>{model}</option>
+                  ))}
+                </select>
+                <button type="button" onClick={detectModels} disabled={!config.baseUrl.trim() || !config.userApiKey.trim() || loadingModels}>
+                  <RefreshCw size={14} />
+                  {loadingModels ? "检测中" : "检测模型"}
+                </button>
+              </div>
+              {modelStatus && <span>{modelStatus}</span>}
+            </label>
+            <label>
+              Model 手动输入
+              <input value={config.model} onChange={(event) => onConfigChange({ ...config, model: event.target.value })} />
+            </label>
+            <label>
+              API Key
+              <input
+                type="password"
+                value={config.userApiKey}
+                onChange={(event) => onConfigChange({ ...config, userApiKey: event.target.value })}
+                placeholder="仅保存在当前浏览器"
+              />
+            </label>
+          </div>
+        )}
         <p>API Key 不上传后端，不进入导出配置。</p>
       </section>
 
